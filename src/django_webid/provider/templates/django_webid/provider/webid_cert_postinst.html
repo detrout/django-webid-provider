@@ -48,7 +48,7 @@ $(document).ready(function($) {
   $("#nameit").click(function(event) {
     event.preventDefault();
     $.ajax({
-      url: "{% url webidprovider-nameit %}",
+      url: "{% url 'webidprovider-nameit' %}",
       type: "POST",
       data: {'certname': $("#certname").val()},
       dataType: "json",
@@ -56,7 +56,7 @@ $(document).ready(function($) {
 	    //console.debug('ok');
       	if(data.named===true){
 	  console.debug('named!');
-	  window.location = "{% url webidprovider-cert_list %}";
+	  window.location = "{% url 'webidprovider-cert_list' %}";
 	}
       } 
     });
@@ -72,7 +72,7 @@ $(document).ready(function($) {
     {% comment %}
     <p class="error">(Or, at least, it <em>should</em> have been installed. Check it, we're in alpha yet)...<br/> How can I check? (here goes link to browser-dependant manual verification)</p>
     {% endcomment %}
-    <p>It is pointing to <a href="{% url webidprovider-webid_uri username=user.username %}">your WebID URI</a>, and from now on you can use it to login in any WebID-enabled site.</p>
+    <p>It is pointing to <a href="{% url 'webidprovider-webid_uri' username=user.username %}">your WebID URI</a>, and from now on you can use it to login in any WebID-enabled site.</p>
     {% endif %}
     <p>{% trans "Enter some comment for your new cert" %}:
     <input type="text" id="certname"/>
@@ -81,7 +81,7 @@ $(document).ready(function($) {
     {% comment %}
     <p>Have fun!</p>
     {% endcomment %}
-    <h2><a href="{% url webidprovider-cert_list %}">Back to your WebID certificates list</a></h2>
+    <h2><a href="{% url 'webidprovider-cert_list' %}">Back to your WebID certificates list</a></h2>
 </div>
 
 {% endblock %}

@@ -46,7 +46,7 @@ from django.shortcuts import render_to_response, redirect,\
 from django.template import RequestContext
 #from django.utils.translation import ugettext_lazy as _
 #from django.views.decorators.csrf import csrf_protect
-from django.views.generic import list_detail
+#from django.views.generic import list_detail
 from django.conf import settings
 from django.db import models
 

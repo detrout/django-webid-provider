@@ -27,7 +27,7 @@
     <p>Your WebID URI will be:</p>
     {# XXX dynamically build WebID URI here #}
     {# XXX FIXME taking only username here. We should be more flexible in the future #}
-    <h2 class="webiduri-display">{% absurl webidprovider-webid_uri username="your_username"%}#me</h2>
+    <h2 class="webiduri-display">{% absurl 'webidprovider-webid_uri' username="your_username"%}#me</h2>
     {# XXX with some js. We cannot use the reverse yet since we do not have an username. Or can we? Hint: using a placeholder #}
     
     <div class="form-toggle big">

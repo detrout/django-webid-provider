@@ -29,14 +29,14 @@
         <!-- HEADER buttons -->
         <div class="home-header-buttons">
 	  {% if user.is_anonymous %}
-	  <a class="reg" href="{% url webidprovider-create_user%}">Create WebID</a>
+	  <a class="reg" href="{% url 'webidprovider-create_user' %}">Create WebID</a>
 	  <div class="log-box">
-		  <p>or <a class="login" href="{% url auth_login %}">Log in</a></p>
+		  <p>or <a class="login" href="{% url 'auth_login' %}">Log in</a></p>
 	  </div>
 	  {% else %}
-	          <a class="reg" href="{% url webidprovider-add_cert %}">Create WebID</a>
+	          <a class="reg" href="{% url 'webidprovider-add_cert' %}">Create WebID</a>
 	  <div class="log-box">
-		  <p>Hello {{user.username}} | <a href="{% url webidprovider-logout %}">Logout</a></p>
+		  <p>Hello {{user.username}} | <a href="{% url 'webidprovider-logout' %}">Logout</a></p>
   	  </div>
 	  {% endif %}
 	  </div>
@@ -50,8 +50,8 @@
 		<p>You'll also probably want to use the companion authentication package <b>django-webid-auth</b>, and <b>django-webid-profile</b> for semantic-ready user profiles (<em>coming soon! ...</em>)
 		{% else %}
 		<h2>Your Actions</h2>
-		  <p><a href="{% url webidprovider-add_cert %}">Create New WebID Cert</a></p>
-		  <p><a href="{% url webidprovider-cert_list %}">Manage your WebID Certs</a></p>
+		  <p><a href="{% url 'webidprovider-add_cert' %}">Create New WebID Cert</a></p>
+		  <p><a href="{% url 'webidprovider-cert_list' %}">Manage your WebID Certs</a></p>
 		  <p><a href="#">Edit your Profile</a></p>
 		{% endif %} {# anonymous #}
 		<h3>For developers</h3>

@@ -77,7 +77,7 @@ $(document).ready(function() {
 
     {% if object.pubkey.is_active %}
     <div class="cert_revoke_link">
-	    <a class="danger" href="{% url webidprovider-cert-revoke cert_id=object.id %}">Revoke this cert</a>
+	    <a class="danger" href="{% url 'webidprovider-cert-revoke' cert_id=object.id %}">Revoke this cert</a>
     </div>
     {% endif %}
 </div>

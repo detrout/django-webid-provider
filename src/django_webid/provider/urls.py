@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import *
-from django.views.generic.simple import redirect_to
+#from django.views.generic.simple import redirect_to
+from django.views.generic import RedirectView
 #from django.views.generic.list_detail import object_list
 from django_webid.provider import views, webiduri
 #from django_webid.provider.models import Cert
@@ -9,7 +10,8 @@ urlpatterns = patterns('',
 
     #temporary REDIRECT
     # XXX move to the sample project
-    url(r'^$', redirect_to, {'url': 'cert/add'}),
+    #url(r'^$', redirect_to, {'url': 'cert/add'}),
+    url(r'^$', RedirectView.as_view(url='cert/add')),
     url(r'^logout$', views.logout_view, name="webidprovider-logout"),
 
     ###################################

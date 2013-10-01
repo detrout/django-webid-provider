@@ -62,7 +62,7 @@
 				    $(this).dialog("close");
 				    },
 				  No: function() {
-				    window.location = "{% url webidprovider-cert_list %}";
+				    window.location = "{% url 'webidprovider-cert_list' %}";
 				    //console.debug('no thanks')
 				    }
 				}
@@ -84,7 +84,7 @@ http://code.google.com/p/chromium/issues/detail?can=2&q=52949&colspec=ID%20Pri%2
 {% endcomment %}
 
 function checkCertResponse(intervalID) {
-	$.ajax({url: '{% url django_webid.provider.views.check_cert_was_delivered %}',
+	$.ajax({url: '{% url 'django_webid.provider.views.check_cert_was_delivered' %}',
 		dataType: "json",
 		success: function(data) {
 			//console.debug('checking data...');
@@ -99,7 +99,7 @@ function checkCertResponse(intervalID) {
 					buttons: {
 						Continue: function() {
 						  //$(this).dialog("close");
-						  window.location = "{% url django_webid.provider.views.cert_post_inst %}"
+						  window.location = "{% url 'django_webid.provider.views.cert_post_inst' %}"
 					 	}
 					}
 				});
@@ -169,7 +169,7 @@ function postCertCountdown(interval, selector) {
     <h1>{% trans "Installing a WebID Certificate in your Browser" %}</h1>
     <p>After clicking the "Give me a cert!" button, a certificate will be created and installed in your browser. This certificate will point to <a href="{{ webiduser.absolute_webid_uri }}">your WebID URI</a> on this site, and you'll be able to use it to login in any WebID-enabled site.</p>
     {% comment %}
-    <a href="{% url webidprovider-webid_uri username=user %}"</a>
+    <a href="{% url 'webidprovider-webid_uri' username=user %}"</a>
     {% endcomment %}
     <p>How should this cert installation step look like? (help links with screenshots)</p>
 
