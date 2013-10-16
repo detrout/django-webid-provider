@@ -1,0 +1,87 @@
+{% extends "webid_provider/base.html" %}
+
+{% load i18n %}
+{% load uni_form_tags %}
+{% load absurl %}
+
+
+{% block head_title %}{% blocktrans %}WebID Creation: Create User{% endblocktrans %}{% endblock %}
+
+{% block extra_head %}
+{% endblock %}
+
+{% block body %}
+
+{% if messages %}
+    <ul id="messages">
+        {% for message in messages %}
+        <li id="message_{{ forloop.counter }}">{{message}}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<div class="middle_panel">
+
+    <h1>{% trans "Create Your User" %}</h1>
+    <p>On this site, you need to create a password-protected user first, which you will use to edit your profile. If you ever lose access to your WebID browser credentials, you can use the password you are setting on this step to create a new certificate.</p>
+    <p>Your WebID URI will be:</p>
+    {# XXX dynamically build WebID URI here #}
+    {# XXX FIXME taking only username here. We should be more flexible in the future #}
+    <h2 class="webiduri-display">{% absurl 'webidprovider-webid_uri' username="your_username"%}#me</h2>
+    {# XXX with some js. We cannot use the reverse yet since we do not have an username. Or can we? Hint: using a placeholder #}
+    
+    <div class="form-toggle big">
+        <form class="uniForm" method="POST" action="">
+	    {% csrf_token %}
+            <fieldset class="inlineLabels">
+                {{ form|as_uni_form }}
+                <div class="form_block">
+		    <div class="submit-input-wrapper">
+                    <input type="submit" value="{% trans "Create User" %}" name="register"/>
+	    	    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_body %}
+<script type="text/javascript">
+var Placeholder = {};
+$(document).ready( function() {
+	console.debug('ready!');
+	Placeholder.container =  $('.webiduri-display')
+	Placeholder.content = "your_username"
+	pc = Placeholder.container
+	pcc = Placeholder.content
+	pc.html(
+		pc.html().
+		replace(pcc, '<span class="webiduri-span" style="color:green;">your_username</span>'));
+	Placeholder.spancontainer = $(".webiduri-span")
+	psc = Placeholder.spancontainer
+
+	i = $("input#id_username")
+	i.change(function(){
+		psc.html(
+			psc.html().
+			replace(pcc, i.val() ));
+		pcc=i.val()
+		})
+	dochange = function () {
+	if (i.val() !== "") {
+		i.change();
+		}
+	}
+	i.keydown(function() {dochange()})
+	i.keyup(function() {dochange()});
+	i.focusout(function() {dochange()});
+	i.focusin(function() {dochange()});
+}()
+)
+</script>
+
+{% endblock %}
+
