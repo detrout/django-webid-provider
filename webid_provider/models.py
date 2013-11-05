@@ -225,7 +225,7 @@ class WebIDUser(User):
     class Meta:
         proxy = True
 
-    # ForeignKey : stored_webiduris -> WebIDURI
+    # ForeignKey in WebIDURI : stored_webiduris
     
     #XXX have to think about this.
     #but here we can
@@ -242,7 +242,9 @@ class WebIDUser(User):
             return WebIDUser.objects.get(stored_webiduris__uri=uri)
         except WebIDUser.DoesNotExist:
             return None
-
+    
+    # Relative URL
+    
     def _get_webid_url(self):
         # XXX FIXME
         # if it is hosted (see checking profile)
@@ -322,7 +324,7 @@ class WebIDURI(models.Model):
     (The URI where we retrieved the WebIDProfile for
     external users; the URI that we have assigned
     thru a callback on hosted users.
-    It can be accessed through WebIDUser proxy model.
+    It can be accessed through WebIDUser proxy model (via stored_webiduris).
     """
     uri = models.URLField(null=True, blank=True)
 

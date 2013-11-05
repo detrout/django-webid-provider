@@ -2,7 +2,7 @@ WebID Provider Django App
 =========================
 
 Authors:
-  Ben Carrillo <bennomadic@gmail.com>
+  Ben Carrillo <bennomadic@gmail.com> / <ben@futeisha.org>
   Julia Anaya <julia.anaya@gmail.com>
 
 **Warning**!
