@@ -71,6 +71,7 @@ from .certs.utils import CertCreator
 from django.contrib.auth import login as auth_login  # authenticate
 from django.contrib.auth.forms import UserCreationForm
 # from django.contrib.auth.models import User
+from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 # 
 # from django.db.models.signals import post_save
@@ -81,6 +82,13 @@ logger = logging.getLogger(name=__name__)
 #############################################################
 # VIEWS BEGIN
 #############################################################
+
+class LoginRequiredMixin(object):
+    """ A mixin requiring a user to be logged in. """
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(LoginRequiredMixin, self).dispatch(*args, **kwargs)
+
 ################
 # CREATE USER
 ################
@@ -151,15 +159,6 @@ def logout_view(request):
     logout(request)
     return redirect('/')
 
-
-class LoggedInMixin(object):
-    """ A mixin requiring a user to be logged in. """
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated():
-            raise Http404
-        return super(LoggedInMixin, self).dispatch(request, *args, **kwargs)
-
- 
 ###########################################
 # CERTS VIEWS                             #
 ###########################################
@@ -168,8 +167,10 @@ class LoggedInMixin(object):
 # CERT:LIST
 #####################
 
-class CertListView(LoggedInMixin, ListView):
+class CertListView(LoginRequiredMixin, ListView):
     template_name = 'webid_provider/cert_list.html'
+    #XXX not working with template object name??
+    #template_object_name = "certs",
     #paginate_by = 25
     #context_object_name = 'posts'
 
@@ -177,40 +178,17 @@ class CertListView(LoggedInMixin, ListView):
         return Cert.objects.filter(pubkey__user=self.request.user).\
                 order_by('-pubkey__created')
 
-# @login_required
-# def cert_list_by_user(request):
-#     try:
-#         certs = Cert.objects.filter(pubkey__user=request.user).\
-#                 order_by('-pubkey__created')
-#     except Cert.DoesNotExist:
-#         raise Http404
-#  
-#     # Use the object_list view for the heavy lifting.
-#     list_view = ListView.as_view()
-#     return list_view(
-#         request,
-#         queryset=certs,
-#         template_name="webid_provider/cert_list.html",
-#         #XXX not working with template object name??
-#         #template_object_name = "certs",
-#     )
- 
 #####################
 # CERT:DETAIL
 #####################
  
-class CertDetailView(LoggedInMixin, DetailView):
+class CertDetailView(LoginRequiredMixin, DetailView):
     #template_name = 'webid_provider/cert_detail.html'
     #model = Cert
     
-    #queryset = Cert.objects.all()
-
     def get_object(self):
 
         # Look up the Cert (and raise a 404 if not found)
-#         print dir(self)
-#         for i in dir(self):
-#             print i, getattr(self, i)
         cert = get_object_or_404(Cert, pk=self.kwargs['cert_id'])
         if cert.pubkey.user != self.request.user:
             raise Http404
@@ -218,20 +196,6 @@ class CertDetailView(LoggedInMixin, DetailView):
         # Return the object
         return cert
 
-# @login_required
-# def cert_detail(request, cert_id):
-#     # Look up the Cert (and raise a 404 if not found)
-#     cert = get_object_or_404(Cert, pk=cert_id)
-#     if cert.pubkey.user != request.user:
-#         raise Http404
-#  
-#     # Show the detail page
-#     return list_detail.object_detail(
-#         request,
-#         queryset=Cert.objects.all(),
-#         object_id=cert_id,
-#         template_name="webid_provider/cert_detail.html"
-#     )
  
 #####################
 # CERT:REVOKE
@@ -463,9 +427,8 @@ def cert_post_inst(request):
                     'sha1fingerprint', None),
                 "user": request.user,
                 }, context_instance=RequestContext(request))
- 
-# 
-# 
+
+
 # ###########################################
 # # WEBID VIEWS                             #
 # ###########################################
