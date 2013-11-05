@@ -433,7 +433,7 @@ def cert_post_inst(request):
 # # WEBID VIEWS                             #
 # ###########################################
 # # Deprecated by the content-negotiated view
-# # in webiduri
+# # in webidprofile
 # 
 # def render_webid(request, username=None):
 #     uu = get_object_or_404(WebIDUser,
