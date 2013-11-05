@@ -1,33 +1,33 @@
-# #!/usr/bin/python
-# # vim: set expandtab tabstop=4 shiftwidth=4:
-# # -*- coding: utf-8 -*-
-# 
-# #
-# # Copyright (C) 2011 bennomadic at gmail dot com
-# #
-# # This program is free software; you can redistribute it and/or modify
-# # it under the terms of the GNU General Public License as published by the
-# # Free Software Foundation; either version 2, or (at your option) any later
-# # version.
-# #
-# # This program is distributed in the hope that it will be useful, but
-# # WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTIBILITY
-# # or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# # for more details.
-# """
-#     views
-#     ~~~~~~~~
-# 
-#     :authors:       Ben Carrillo, Julia Anaya
-#     :organization:  rhizomatik labs
-#     :copyright:     Cooperative Quinode
-#     :license:       GNU GPL version 3 or any later version
-#                     (details at http://www.gnu.org)
-#     :contact:       bennomadic at gmail dot com
-#     :dependencies:  python (>= version 2.6)
-#     :change log:
-#     :TODO:
-# """
+#!/usr/bin/python
+# vim: set expandtab tabstop=4 shiftwidth=4:
+# -*- coding: utf-8 -*-
+ 
+#
+# Copyright (C) 2011 bennomadic at gmail dot com
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 2, or (at your option) any later
+# version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTIBILITY
+# or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+"""
+    views
+    ~~~~~~~~
+ 
+    :authors:       Ben Carrillo, Julia Anaya
+    :organization:  rhizomatik labs
+    :copyright:     Cooperative Quinode
+    :license:       GNU GPL version 3 or any later version
+                    (details at http://www.gnu.org)
+    :contact:       bennomadic at gmail dot com
+    :dependencies:  python (>= version 2.6)
+    :change log:
+    :TODO:
+"""
 import hashlib
 import json
 import logging
