@@ -1,6 +1,10 @@
 import types
 
+from rdflib import Graph, Namespace, RDF, URIRef, Literal, BNode, RDFS #, OWL, ConjunctiveGraph
+from rdflib.namespace import XSD
+
 from django.conf import settings
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext, TemplateDoesNotExist
 from django.utils.decorators import classonlymethod
@@ -97,35 +101,80 @@ class WebIDProfileView(ContentNegotiatedView):
 
     @renderer(format='turtle', mimetypes=('text/turtle',), name='Turtle', priority=2)
     def render_text_turtle(self, request, context, template_name):
-        template_name = self.join_template_name(template_name, 'turtle')
-        if template_name is None:
+#         template_name = self.join_template_name(template_name, 'turtle')
+#         if template_name is None:
+#             return NotImplemented
+#         try:
+#             return render_to_response(template_name,
+#                                       context,
+#                                       context_instance=RequestContext(request),
+#                                       mimetype='text/turtle')
+#         except TemplateDoesNotExist:
+#             return NotImplemented
+        g = context.get('rdflibgraph')
+        if not isinstance(g, Graph):
             return NotImplemented
-        try:
-            return render_to_response(template_name,
-                                      context,
-                                      context_instance=RequestContext(request),
-                                      mimetype='text/turtle')
-        except TemplateDoesNotExist:
-            return NotImplemented
+        else :
+            out = g.serialize(format='turtle')
+            return HttpResponse(out, content_type="text/turtle")
+
 
     @renderer(format='rdfxml', mimetypes=('application/rdf+xml',), name='RDFXML', priority=1)
     def render_application_rdfxml(self, request, context, template_name):
-        template_name = self.join_template_name(template_name, 'rdfxml')
-        if template_name is None:
+#         template_name = self.join_template_name(template_name, 'rdfxml')
+#         if template_name is None:
+#             return NotImplemented
+#         try:
+#             return render_to_response(template_name,
+#                                       context,
+#                                       context_instance=RequestContext(request),
+#                                       mimetype='application/rdf+xml')
+#         except TemplateDoesNotExist:
+#             return NotImplemented
+        g = context.get('rdflibgraph')
+        if not isinstance(g, Graph):
             return NotImplemented
-        try:
-            return render_to_response(template_name,
-                                      context,
-                                      context_instance=RequestContext(request),
-                                      mimetype='application/rdf+xml')
-        except TemplateDoesNotExist:
-            return NotImplemented
+        else :
+            out = g.serialize(format='application/rdf+xml')
+            return HttpResponse(out, content_type="application/rdf+xml")
 
     def get(self, request, username=None):
         uu = get_object_or_404(WebIDUser,
             username=username)
+        
+        # construct a rdflib graph
+        g = Graph()
+        
+        FOAF = Namespace('http://xmlns.com/foaf/0.1/')
+        CERT = Namespace('http://www.w3.org/ns/auth/cert#')
+        
+        g = Graph()
+
+        g.bind('foaf', FOAF)
+        g.bind('cert', CERT)
+
+        username = uu.username
+        resource_uri = '#me'
+        rdfres = URIRef(resource_uri)
+        type = FOAF.Person
+        g.add( (rdfres, RDF.type, type) )
+        g.add( (rdfres, FOAF.name, Literal(username)) )
+        
+        for pk in uu.keys:
+            mod = pk.mod
+            exp = pk.exp
+            
+            cert = BNode()
+            g.add( (cert, RDF.type, CERT.RSAPublicKey) )
+            g.add( (cert, RDFS.label, Literal("key made on [...] on my laptop")) )
+            g.add( (cert, CERT.modulus, Literal(mod, datatype=XSD.hexBinary)) )
+            g.add( (cert, CERT.exponent, Literal(exp)) )
+            
+            g.add( (rdfres, CERT.key, cert))
+        
         context = {
                 "webiduser": uu,
+                "rdflibgraph": g,
                 "MEDIA_URL": settings.MEDIA_URL,
                 "STATIC_URL": settings.STATIC_URL,
         }
