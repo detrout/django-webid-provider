@@ -147,6 +147,12 @@ INSTALLED_APPS = (
 
 ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, use a different value.
 
+# Uncomment to disable user regsitration
+#REGISTRATION_OPEN = False
+
+# Where to redirect logged-in users to
+LOGIN_REDIRECT_URL = '/'
+
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
 # A sample logging configuration. The only tangible logging
