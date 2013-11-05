@@ -16,12 +16,19 @@ Introduction
 ------------
 A reusable django app that turns any django-powered site into a `WebID provider <http://webid.info/spec>`_.
 
+The main Django 1.5 application is in 'webidprovider'. It just binds 2 sub components :
+ - 'webid_provider' : the main engine of the WebID provider application
+ - 'example_webid_provider' : the visual identity of the site
+
 Issues / contributing
 ---------------------
 You can use either the `github bug tracker <https://github.com/bennomadic/django-webid-provider/issues>`_ or the `official tracker at Quinode's redmine <http://redmine.django.coop/projects/webid-provider>`_. Patches by mail or pull requests are also welcome :)
 
 Testing
 -------
+
+ $ python ./manage.py [command]
+
 Use fabric magic::
 
   fab init

@@ -23,6 +23,7 @@ urlpatterns = patterns('',
 #     url(r'^$', RedirectView.as_view(url='cert/add')),
     url(r'^$', TemplateView.as_view(template_name='webid_provider/webid_index.html'), name="home"),
 
+    # Binding with django-registration
     url(r'^accounts/', include('registration.backends.default.urls')),
     #url(r'^accounts/login/', 'django.contrib.auth.views.login'),
     url(r'^logout$', "webid_provider.views.logout_view", name="webidprovider-logout"),
