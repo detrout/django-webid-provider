@@ -150,6 +150,21 @@ class WebIDProfileView(ContentNegotiatedView):
         user = self.get_user()
         return user.username
         
+    def get_foaf_mbox(self):
+        """returns the email"""
+        # to be subclassed
+        return None
+
+    def get_foaf_homepage(self):
+        """returns the homepage"""
+        # to be subclassed
+        return None
+    
+    def complement_rdf_graph(self, graph):
+        """complements the RDF graph with other triples"""
+        # to be subclassed
+        pass
+    
     def get_rdf_graph(self):
         """Creates a rdflib Graph modeling the WebID profile"""
         user = self.get_user()
@@ -174,6 +189,14 @@ class WebIDProfileView(ContentNegotiatedView):
         username = self.get_foaf_name()
         g.add( (rdfres, FOAF.name, Literal(username)) )
         
+        email = self.get_foaf_mbox()
+        if email :
+            g.add( (rdfres, FOAF.mbox, Literal('mailto:' + email)) )
+
+        homepage = self.get_foaf_homepage()
+        if homepage :
+            g.add( (rdfres, FOAF.homepage, URIRef(homepage)) )
+            
         for pk in user.keys:
             mod = pk.mod
             exp = pk.exp
@@ -185,6 +208,13 @@ class WebIDProfileView(ContentNegotiatedView):
             g.add( (cert, CERT.exponent, Literal(exp)) )
             
             g.add( (rdfres, CERT.key, cert))
+
+        self.complement_rdf_graph(g)
+        
+        # Profile document
+        doc_res = URIRef('')
+        g.add( (doc_res, RDF.type, FOAF.PersonalProfileDocument) )
+        g.add( (doc_res, FOAF.primaryTopic, rdfres) )
 
         return g
     
