@@ -165,7 +165,8 @@ class WebIDProfileView(ContentNegotiatedView):
         g.bind('foaf', FOAF)
         g.bind('cert', CERT)
 
-        resource_uri = '#me'
+        #resource_uri = '#me'
+        resource_uri = user.absolute_webid_uri
         rdfres = URIRef(resource_uri)
         type = FOAF.Person
         g.add( (rdfres, RDF.type, type) )
