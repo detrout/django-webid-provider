@@ -138,9 +138,21 @@ class WebIDProfileView(ContentNegotiatedView):
             out = g.serialize(format='application/rdf+xml')
             return HttpResponse(out, content_type="application/rdf+xml")
 
-    def get(self, request, username=None):
-        uu = get_object_or_404(WebIDUser,
-            username=username)
+
+    def get_user(self, username=None):
+        """Returns the current User (cached)""" 
+        if not hasattr(self, 'user'):
+            self.user = WebIDUser.objects.get(username=username)
+        return self.user
+        
+    def get_foaf_name(self):
+        """Computes the foaf:name value"""
+        user = self.get_user()
+        return user.username
+        
+    def get_rdf_graph(self):
+        """Creates a rdflib Graph modeling the WebID profile"""
+        user = self.get_user()
         
         # construct a rdflib graph
         g = Graph()
@@ -153,14 +165,15 @@ class WebIDProfileView(ContentNegotiatedView):
         g.bind('foaf', FOAF)
         g.bind('cert', CERT)
 
-        username = uu.username
         resource_uri = '#me'
         rdfres = URIRef(resource_uri)
         type = FOAF.Person
         g.add( (rdfres, RDF.type, type) )
+        
+        username = self.get_foaf_name()
         g.add( (rdfres, FOAF.name, Literal(username)) )
         
-        for pk in uu.keys:
+        for pk in user.keys:
             mod = pk.mod
             exp = pk.exp
             
@@ -171,6 +184,16 @@ class WebIDProfileView(ContentNegotiatedView):
             g.add( (cert, CERT.exponent, Literal(exp)) )
             
             g.add( (rdfres, CERT.key, cert))
+
+        return g
+    
+    def get(self, request, username=None):
+        try:
+            uu = self.get_user(username)
+        except Model.DoesNotExist:
+            raise Http404
+        
+        g = self.get_rdf_graph()
         
         context = {
                 "webiduser": uu,
