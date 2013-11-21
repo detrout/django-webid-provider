@@ -2,8 +2,7 @@
 # #from django.views.generic.simple import redirect_to
 # from django.views.generic import RedirectView
 # #from django.views.generic.list_detail import object_list
-# from django_webid.provider import views, webiduri
-from webid_provider import views, webiduri
+from webid_provider import views, webidprofile
 # #from django_webid.provider.models import Cert
 
 from django.conf.urls import patterns, include, url
@@ -62,8 +61,9 @@ urlpatterns = patterns('',
     #XXX but at the same time provide a fallback mechanism...
  
     url(r'^(?P<username>\w+)$',
-        webiduri.WebIDProfileView.as_view(), name="webidprovider-webid_uri"),
-# 
+        webidprofile.WebIDProfileView.as_view(), name="webidprovider-webid_uri"),
+
+#
 #     ################################################
 #     ################################################
 #     # Some other, older tests: to be cleaned from here...

@@ -59,6 +59,8 @@ add a MUCH SMALLER CSS / or inline. do not need to include the whole base!
   {% endcomment %}
   {% pubkey_rdf "rdfa" webiduser %}
 </div> <!-- about:me -->
+<p>Turtle preview:</p>
+<pre>{{ turtleserialization }}</pre>
 </div> <!-- wrapper -->
 <!-- WebID HTML snippet -->
 <div class="footer">Powered by django. (c) 2012 Cooperative Quinode / RhizoLabs.</div>
