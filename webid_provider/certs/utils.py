@@ -171,7 +171,7 @@ class CertCreator(object):
         #XXX get this from CertConfig ?
         #XXX have it cached somewhere?
         issuer_data = (('CN', 'Not a Certification Authority'),
-                        ('O', 'FOAF+SSL'),
+                        ('O', 'WebID+TLS'),
                         ('OU', 'The Community of Self Signers'))
         for k, v in issuer_data:
             setattr(icert.get_subject(), k, v)
