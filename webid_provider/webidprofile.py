@@ -92,10 +92,35 @@ class WebIDProfileView(ContentNegotiatedView):
         if template_name is None:
             return NotImplemented
         try:
-            return render_to_response(template_name,
+            g = context.get('rdflibgraph')
+            if not isinstance(g, Graph):
+                return NotImplemented
+            else :
+                out = g.serialize(format='turtle')
+                context['turtleserialization'] = out
+                return render_to_response(template_name,
                                       context,
                                       context_instance=RequestContext(request),
                                       mimetype='text/html')
+        except TemplateDoesNotExist:
+            return NotImplemented
+
+    @renderer(format='rdfa', mimetypes=('application/xhtml+xml',), name='RDFa', priority=2)
+    def render_application_xhtmlxml(self, request, context, template_name):
+        template_name = self.join_template_name(template_name, 'rdfa')
+        if template_name is None:
+            return NotImplemented
+        try:
+            g = context.get('rdflibgraph')
+            if not isinstance(g, Graph):
+                return NotImplemented
+            else :
+                out = g.serialize(format='turtle')
+                context['turtleserialization'] = out
+                return render_to_response(template_name,
+                                      context,
+                                      context_instance=RequestContext(request),
+                                      mimetype='application/xhtml+xml')
         except TemplateDoesNotExist:
             return NotImplemented
 
@@ -165,6 +190,11 @@ class WebIDProfileView(ContentNegotiatedView):
         # to be subclassed
         pass
     
+    def get_context_contecomplements(self):
+        """complements the RDF graph with other triples"""
+        # to be subclassed
+        pass
+    
     def get_rdf_graph(self):
         """Creates a rdflib Graph modeling the WebID profile"""
         user = self.get_user()
@@ -229,6 +259,7 @@ class WebIDProfileView(ContentNegotiatedView):
         context = {
                 "webiduser": uu,
                 "rdflibgraph": g,
+                "complements": self.get_context_contecomplements(),
                 "MEDIA_URL": settings.MEDIA_URL,
                 "STATIC_URL": settings.STATIC_URL,
         }
